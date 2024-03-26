@@ -21,9 +21,19 @@ router.get('/products/new',(req,res)=>{
 
 router.post('/products',async (req,res)=>{
     const {name,price,desc,img}=req.body;
-    await Product.create({name,price,desc,img});
+    await Product.create({name,price,desc,img});//add the object in db automatically
     res.redirect('/products');
 
+})
+
+router.get('/products/:id', async (req,res)=>{
+    try {
+        const product=await Product.findById(req.params.id);
+        // console.log(product)
+        res.render('details',{product});
+    } catch (error) {
+        console.log("error in /products/:id route :",error)
+    }
 })
 
 
