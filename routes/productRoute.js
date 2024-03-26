@@ -35,6 +35,21 @@ router.get('/products/:id', async (req,res)=>{
         console.log("error in /products/:id route :",error)
     }
 })
+router.get('/products/:id/edit',async (req,res)=>{
+    try {
+        const product=await Product.findById(req.params.id);
+        // console.log(product)
+        res.render('edit',{product});
+    } catch (error) {
+        console.log("error in /products/:id/edit route :",error)
+    }
+})
+
+router.patch('/products/:id',async (req,res)=>{
+    const {name,price,desc,img}=req.body;
+    await Product.findByIdAndUpdate(req.params.id,{name,price,desc,img});
+    res.redirect('/products');
+})
 
 
 module.exports=router;
