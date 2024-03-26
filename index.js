@@ -3,13 +3,13 @@ const {server}=require('http');
 const path= require('path');
 const mongoose=require('mongoose');
 const app=express();
-// const seedDB=require('./seed');
+const seedDB=require('./seed');
 
-// mongoose.connect('mongodb://127.0.0.1:27017/ecomdb').then(()=>{
-//     console.log('Connected to MongoDB');
-// }).catch(err=>{
-//     console.log('db not connected',err);
-// });
+mongoose.connect('mongodb://127.0.0.1:27017/ecomdb').then(()=>{
+    console.log('Connected to MongoDB');
+}).catch(err=>{
+    console.log('db not connected',err);
+});
 
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
