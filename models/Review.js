@@ -13,7 +13,7 @@ const reviewSchema= new mongoose.Schema({
         required:true,
         trim:true
     }
-})
+},{timestamps:true})
 
 // makin a model
 // model name should be a singular and always be start with capital leter
