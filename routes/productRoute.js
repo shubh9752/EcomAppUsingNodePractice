@@ -28,7 +28,8 @@ router.post('/products',async (req,res)=>{
 
 router.get('/products/:id', async (req,res)=>{
     try {
-        const product=await Product.findById(req.params.id);
+        // const product=await Product.findById(req.params.id);
+        const product=await Product.findById(req.params.id).populate('reviews');//populate will give me the items of review (it will iterate on reviews) in simple words populate mere diye huye collection me jayega or sara data mujhe lakar dedega
         // console.log(product)
         res.render('details',{product});
     } catch (error) {
