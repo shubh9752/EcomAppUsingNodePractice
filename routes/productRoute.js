@@ -1,5 +1,7 @@
 const express=require('express');
 const Product = require('../models/Product');
+const Review = require('../models/Review');
+const { validationProduct } = require('../middleware');
 const router=express.Router();
 
 router.get('/products', async(req,res,next)=>{
@@ -19,7 +21,7 @@ router.get('/products/new',(req,res)=>{
     }
 })
 
-router.post('/products',async (req,res)=>{
+router.post('/products', validationProduct ,async (req,res)=>{
     const {name,price,desc,img}=req.body;
     await Product.create({name,price,desc,img});//add the object in db automatically
     res.redirect('/products');
@@ -46,13 +48,17 @@ router.get('/products/:id/edit',async (req,res)=>{
     }
 })
 
-router.patch('/products/:id',async (req,res)=>{
+router.patch('/products/:id', validationProduct  ,async (req,res)=>{
     const {name,price,desc,img}=req.body;
     await Product.findByIdAndUpdate(req.params.id,{name,price,desc,img});
     res.redirect('/products');
 })
 router.delete('/products/:id',async (req,res)=>{
     // const {name,price,desc,img}=req.body;
+    const product=await Product.findById(req.params.id);
+    for(let ids of product.reviews){
+        await Review.findByIdAndDelete(ids);
+    }
     await Product.findByIdAndDelete(req.params.id);
     res.redirect('/products');
 })

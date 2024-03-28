@@ -62,8 +62,12 @@
                 <h1>Reviews</h1>
                 <% for(let item of product.reviews) { %>
                     <br>
-                    <small><p><%= item.createdAt.toDateString() %></p></small>
+                    
                     <!-- <h2>Rating: <%= item.rating %></h2> -->
+                    
+                    <% if(item.createAt){ %>
+                        <small><p><%= item.createdAt.toDateString() %></p></small>
+                    <% } %>
                     rating:
                     <p class="starability-result " data-rating="<%= item.rating %>">
                         Rated: 3 stars

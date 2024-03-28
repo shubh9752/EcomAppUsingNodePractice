@@ -1,9 +1,10 @@
 const express=require('express');
 const Product = require('../models/Product');
 const Review = require('../models/Review');
+const { validationReview } = require('../middleware');
 const router=express.Router();
 
-router.post('/products/:id/rating',async (req,res)=>{
+router.post('/products/:id/rating', validationReview ,async (req,res)=>{
     try {
         // res.send(req.body)
 
