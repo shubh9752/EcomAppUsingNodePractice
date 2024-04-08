@@ -1,10 +1,11 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
+const Review = require('./Review');
 
-const productSchema= new mongoose.Schema({
+const productSchema = new mongoose.Schema({
     name:{
         type:String,
-        required:true,
-        trim:true
+        trim:true,
+        required:true
     },
     img:{
         type:String,
@@ -12,25 +13,37 @@ const productSchema= new mongoose.Schema({
     },
     price:{
         type:Number,
-        required:true,
         min:0,
-        trim:true
+        required:true
+    },
+    istock:{
+        type:Boolean,
+        default:true,
     },
     desc:{
         type:String,
-        required:true,
         trim:true
     },
     reviews:[
         {
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Review'
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Review'
         }
-    ]
+    ],
+    author:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
+    }
+});
+
+
+
+productSchema.post('findOneAndDelete' , async function(product){
+    if(product.reviews.length > 0){
+        await Review.deleteMany({_id:{$in:product.reviews}})
+    }
 })
 
-// makin a model
-// model name should be a singular and always be start with capital leter
-let Product=mongoose.model('Product',productSchema);
 
-module.exports=Product;
+let Product = mongoose.model('Product' , productSchema);
+module.exports = Product;

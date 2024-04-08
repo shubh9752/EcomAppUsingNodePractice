@@ -1,46 +1,49 @@
-const express=require('express');
-const {server}=require('http');
-const path= require('path');
-const mongoose=require('mongoose');
-const app=express();
-const seedDB=require('./seed');
-const productRoutes=require('./routes/productRoute');
-const reviewsRoutes=require('./routes/reviewRoute');
-const authRoutes=require('./routes/auth')
-const methodOverride = require('method-override');
-const flash = require('connect-flash');
+const express = require('express');
+const app = express();
+const path = require('path');
+const mongoose = require('mongoose');
+const seedDB = require('./seed');
+const methodOverride  = require('method-override');
 const session = require('express-session');
+const flash = require('connect-flash');
+const productRoutes = require("./routes/productRoutes");
+const reviewRoutes = require("./routes/review");
+const authRoutes = require("./routes/auth");
 const passport = require('passport'); //pass
 const LocalStrategy = require('passport-local'); //pass
 const User = require('./models/User'); //pass
 
-let configSession={
-    secret: 'your-secret-key', // Change this to a secret key of your choice
-    resave: false,
-    saveUninitialized: false
-};
 
-
+mongoose.set('strictQuery', true);
+mongoose.connect('mongodb://127.0.0.1:27017/ecomdb')
+.then(()=>{console.log("DB connected")})
+.catch((err)=>{console.log(err)})
  
-// override with POST having ?_method=DELETE
 
-
-mongoose.connect('mongodb://127.0.0.1:27017/ecomdb').then(()=>{
-    console.log('Connected to MongoDB');
-}).catch(err=>{
-    console.log('db not connected',err);
-});
-
-app.set('view engine','ejs');
-app.set('views',path.join(__dirname,'views'));
-
+app.set('view engine' , 'ejs');
+app.set('views' , path.join(__dirname,'views'));
+// now for public folder
 app.use(express.static(path.join(__dirname,'public')));
-
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 
+// seeding dummy data
+// seedDB();
+
+let configSession = {
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true , 
+    cookie:{
+        httpOnly:true , 
+        expires : Date.now() + 7*24*60*60*1000,
+        maxAge: 7*24*60*60*1000
+    }
+}
+
 app.use(session(configSession));
-app.use(flash());  //flash is dependent on session
+app.use(flash());
+
 
 // use static serialize and deserialize of model for passport session support
 app.use(passport.initialize()); //pass
@@ -51,18 +54,20 @@ passport.deserializeUser(User.deserializeUser()); //pass
 // use static authenticate method of model in LocalStrategy
 passport.use(new LocalStrategy(User.authenticate())); //pass
 
+
 app.use((req,res,next)=>{
-    res.locals.success=req.flash('success');
-    res.locals.error=req.flash('error');
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
     next();
 })
 
-// seedDB();
-
+// Routes
 app.use(productRoutes);
-app.use(reviewsRoutes);
+app.use(reviewRoutes);
 app.use(authRoutes);
 
-app.listen(8080,()=>{
-    console.log('Server is running on port 8080');
+const port = 8080;
+app.listen(port,()=>{
+    console.log(`server connected at port : ${port}`);
 })
