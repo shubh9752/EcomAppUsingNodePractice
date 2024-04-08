@@ -8,20 +8,31 @@
 </head>
 <body class="bg-gray-100">
     <%- include('./alertFlash') %>
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-6">Product Cards </h1>
+    <div class="container  mx-auto px-4 py-8">
+        <div class=" flex justify-between text-3xl font-bold mb-6">
+          <h2>Products</h2>
+          <div>
+            <h4><a href="/signin">sign-in</a></h4>
+            <h4><a href="/signin">sign-out</a></h4>
+
+          </div>
+            
+        </div>
+        
+        <div class="flex flex-wrap justify-between h-[80%] w-full bg-green-400">
 
         <% for(let items of products ){ %>
-
-        <div class="flex flex-wrap justify-center -mx-4">
+        
+        <div class="flex flex-wrap justify-center h-auto w-full bg-green-400">
             <!-- Card 1 -->
-            <div class="bg-white w-[20%] h-[20%] rounded-lg shadow-lg overflow-hidden ">
-                <img src="<%= items.img %>" alt="Product Image" class="w-full h-40 object-cover object-center">
+            <div class="bg-white w-[20%] h-[20%]  rounded-lg shadow-lg overflow-hidden ">
+                <img src="<%= items.img %>" alt="Product Image" class="w-full h-40 object-contain object-center">
                 <div class="p-4">
                     <h2 class="text-xl font-semibold mb-2"><%= items.name %></h2>
                     <p class="text-gray-700 mb-4"><%= items.desc %></p>
+                    <span class="text-lg font-bold text-green-500">$<%= items.price %></span>
                     <div class="flex flex-wrap justify-between items-center">
-                        <span class="text-lg font-bold text-green-500">$<%= items.price %></span>
+                       
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Buy Now</button>
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><a href="/products/<%= items._id %>">Show Details</a></button>
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><a href="/products/<%= items._id %>/edit">Edit Details</a></button>
@@ -33,6 +44,7 @@
             </div>
         </div>
         <% } %> 
+        </div>
     </div>
     
 </body>

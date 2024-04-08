@@ -6,9 +6,13 @@ const app=express();
 const seedDB=require('./seed');
 const productRoutes=require('./routes/productRoute');
 const reviewsRoutes=require('./routes/reviewRoute');
+const authRoutes=require('./routes/auth')
 const methodOverride = require('method-override');
 const flash = require('connect-flash');
 const session = require('express-session');
+const passport = require('passport'); //pass
+const LocalStrategy = require('passport-local'); //pass
+const User = require('./models/User'); //pass
 
 let configSession={
     secret: 'your-secret-key', // Change this to a secret key of your choice
@@ -38,6 +42,15 @@ app.use(methodOverride('_method'));
 app.use(session(configSession));
 app.use(flash());  //flash is dependent on session
 
+// use static serialize and deserialize of model for passport session support
+app.use(passport.initialize()); //pass
+app.use(passport.session()); //pass
+passport.serializeUser(User.serializeUser()); //pass
+passport.deserializeUser(User.deserializeUser()); //pass
+
+// use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(User.authenticate())); //pass
+
 app.use((req,res,next)=>{
     res.locals.success=req.flash('success');
     res.locals.error=req.flash('error');
@@ -48,6 +61,7 @@ app.use((req,res,next)=>{
 
 app.use(productRoutes);
 app.use(reviewsRoutes);
+app.use(authRoutes);
 
 app.listen(8080,()=>{
     console.log('Server is running on port 8080');
