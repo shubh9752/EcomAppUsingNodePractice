@@ -38,11 +38,11 @@ const productSchema = new mongoose.Schema({
 
 
 
-productSchema.post('findOneAndDelete' , async function(product){
-    if(product.reviews.length > 0){
-        await Review.deleteMany({_id:{$in:product.reviews}})
-    }
-})
+// productSchema.post('findOneAndDelete' , async function(product){
+//     if(product.reviews.length > 0){
+//         await Review.deleteMany({_id:{$in:product.reviews}})
+//     }
+// })
 
 
 let Product = mongoose.model('Product' , productSchema);

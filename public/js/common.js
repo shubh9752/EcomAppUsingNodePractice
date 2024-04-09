@@ -1,6 +1,5 @@
 
 
-
 let allLikeButton = document.querySelectorAll('.like-btn');
 
 
@@ -39,3 +38,7 @@ for(let btn of allLikeButton){
         likeButton(productId ,  btn);
     })
 }
+
+
+
+

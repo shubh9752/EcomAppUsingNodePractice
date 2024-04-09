@@ -1,6 +1,6 @@
 const Product = require("./models/Product");
-const { productSchema } = require("./schema");
-const { reviewSchema } = require("./schema");
+const { productSchema } = require("./validationSchema");
+const { reviewSchema } = require("./validationSchema");
 
 const validateProduct = (req,res,next)=>{
     const {name, img, price , desc} = req.body;
