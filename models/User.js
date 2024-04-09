@@ -1,5 +1,6 @@
 const mongoose =  require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
+const Product = require('./Product');
 
 
 const userSchema = new mongoose.Schema({
@@ -18,6 +19,10 @@ const userSchema = new mongoose.Schema({
         type:String,
         trim:true,
         required:true
+    },
+    wishlist:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Product',
     }
 } )
 

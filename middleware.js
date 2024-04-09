@@ -1,6 +1,6 @@
 const Product = require("./models/Product");
-const { productSchema } = require("./validationSchema");
-const { reviewSchema } = require("./validationSchema");
+const { productSchema } = require("./schema");
+const { reviewSchema } = require("./schema");
 
 const validateProduct = (req,res,next)=>{
     const {name, img, price , desc} = req.body;
@@ -26,6 +26,12 @@ const validateReview = (req,res,next)=>{
 }
 
 const isLoggedIn = (req,res,next)=>{
+
+    if(req.xhr && !req.isAuthenticated()){
+        return res.status(401).send('unauthorised');
+        // console.log(req.xhr);//ajax hai ya nhi hai?
+    }
+
     if(!req.isAuthenticated()){
         req.flash('error' , 'You need to login first');
         return res.redirect('/login')
